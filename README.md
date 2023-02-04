@@ -156,3 +156,6 @@ pyinstaller run_app.spec --clean
 
 
 ## 🎈 It's done! run your run_app.exe file and see the magic 🪄
+
+<pre>Huge Thanks To: <pre>
+<pre>I'm organizing the solution from <a href="https://discuss.streamlit.io/t/using-pyinstaller-or-similar-to-create-an-executable/902/18"> hmasdev in the Streamlit Forum</a></pre>
