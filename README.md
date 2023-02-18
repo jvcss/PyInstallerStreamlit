@@ -1,22 +1,30 @@
+# Streamlit to Executable
+
 ## Create a virtual environment
 
 ```bash
 pyenv virtualenv <version> <env-name>
+#or
+python -m venv .<env-name>
 ```
 
 ## Activate the virtual environment
 ```bash
 pyenv activate <env-name>
+#or
+.\op a #.venv\Scripts\activate.bat
 ```
 
 ## Verify that the virtual environment
 ```bash
-python --version1
+python --version
 ```
 
 ## To deactivate the virtual environment
 ```bash
 pyenv deactivate
+#or
+.\op a #.venv\Scripts\deactivate.bat
 ```
 ---
 ## Install Streamlit and [pyinstaller OR auto-py-to-exe] and any other lib you'll use
@@ -129,17 +137,17 @@ copy app.py output/app.py
 a = Analysis(
     //...
     datas=[
-        (".envir/Lib/site-packages/altair/vegalite/v4/schema/vega-lite-schema.json",
+        (".env/Lib/site-packages/altair/vegalite/v4/schema/vega-lite-schema.json",
         "./altair/vegalite/v4/schema/"),
-        (".envir/Lib/site-packages/streamlit/static",
+        (".env/Lib/site-packages/streamlit/static",
         "./streamlit/static"),
-        (".envir/Lib/site-packages/streamlit/runtime",
+        (".env/Lib/site-packages/streamlit/runtime",
         "./streamlit/runtime"),
     //...)
 ...
 ```
 ```bash
-# I actually don't know exacly why 
+# 
 # this path pair should be in that way
 # but I believe it is because we add the tuple as this templete
 # (absolut_path, parent_path)
@@ -157,5 +165,5 @@ pyinstaller run_app.spec --clean
 
 ## 🎈 It's done! run your run_app.exe file and see the magic 🪄
 
-<pre>Huge Thanks To: <pre>
+<pre>Huge Thanks To: hmasdev<pre>
 <pre>I'm organizing the solution from <a href="https://discuss.streamlit.io/t/using-pyinstaller-or-similar-to-create-an-executable/902/18"> hmasdev in the Streamlit Forum</a></pre>
