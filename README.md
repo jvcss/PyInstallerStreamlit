@@ -24,7 +24,7 @@ python --version
 ```bash
 pyenv deactivate
 #or
-.\op a #.venv\Scripts\deactivate.bat
+.\op d #.venv\Scripts\deactivate.bat
 ```
 ---
 ## Install Streamlit and [pyinstaller OR auto-py-to-exe] and any other lib you'll use
