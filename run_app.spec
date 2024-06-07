@@ -9,7 +9,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        (".env/Lib/site-packages/altair/vegalite/v4/schema/vega-lite-schema.json","./altair/vegalite/v4/schema/"),
+        (".env/Lib/site-packages/altair/vegalite/v5/schema/vega-lite-schema.json","./altair/vegalite/v5/schema/"),
         (".env/Lib/site-packages/streamlit/static","./streamlit/static"),
         (".env/Lib/site-packages/streamlit/runtime","./streamlit/runtime"),
     ],
