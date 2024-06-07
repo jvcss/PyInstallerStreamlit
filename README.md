@@ -1,140 +1,145 @@
 # Streamlit to Executable
-#### [tutorial](https://youtu.be/G7Qeg_rbYM8)
-## Create a virtual environment
+#### [Tutorial](https://youtu.be/G7Qeg_rbYM8)
+
+## Create a Virtual Environment
 
 ```bash
 pyenv virtualenv <version> .<env-name>
-#or THE DOT IS IMPORTANT!
+# or
 python -m venv .<env-name>
+# THE DOT IS IMPORTANT!
 ```
 
-## Activate the virtual environment
+# Activate the Virtual Environment
+
 ```bash
 pyenv activate <env-name>
-#or
-.\op a #.venv\Scripts\activate.bat
+# or
+.<env-name>\\Scripts\\activate.bat
 ```
 
-## Verify that the virtual environment
+# Verify the Virtual Environment
+
 ```bash
 python --version
 ```
 
-## To deactivate the virtual environment
+# Deactivate the Virtual Environment
+
 ```bash
 pyenv deactivate
-#or
-.\op d #.venv\Scripts\deactivate.bat
+# or
+.<env-name>\\Scripts\\deactivate.bat
 ```
----
-## Install Streamlit and [pyinstaller OR auto-py-to-exe] and any other lib you'll use
+
+# Install Streamlit and Other Required Libraries
+
 ```bash
-#I'm using streamlit==1.8.1 But in the 
-#Tutorial I explain what could change for us.
-#So You could use the latest
+# You can use the latest version
 pip install streamlit pyinstaller
 ```
-## Now we add the main file called here app.py
+
+# Add the Main File (app.py)
+
 ```bash
 echo > app.py
 ```
-## And we need to create an entry point for our executable
+
+# Create an Entry Point for the Executable (run_app.py)
+
 ```bash
 echo > run_app.py
 ```
 
+# Add Content to Your Files
 
-## At this point you should be able to add content
+- app.py:
 
-### app.py:
 ```python
 import streamlit as st
+
 if __name__ == '__main__':
-    st.header("Hello world")
+    st.header("Hello, World!")
 ```
 
-### run_app.py
+- run_app.py
+
 ```python
-from streamlit.web import cli 
-#this uri depends based on version of your streamlit
+from streamlit.web import cli
+
+# This import path depends on your Streamlit version
 if __name__ == '__main__':
     cli._main_run_clExplicit('app.py', args=['run'])
-    #we will CREATE this function inside our streamlit framework
+    # We will CREATE this function inside our Streamlit framework
+
 ```
----
-## Now we need to navigate into the path inside streamlit veins
-## in the version we are using here it is 
-### .envir\Lib\site-packages\streamlit\web\cli.py
-## It's because we are using our virtual environment
-### now add our magic function
+
+# Navigate to the Streamlit Path
+
+In the version we are using, it is located at: `.env\Lib\site-packages\streamlit\web\cli.py`
+
+# Add the Magic Function
 ```python
-#... def main(log_level="info"):
+# ... def main(log_level="info"):
 # [...]
-# you can you the name you prefer ofcourse
-# as long as you use underscore at the beginning
-def _main_run_clExplicit(file, is_hello, args=[],flag_options={}):
-    bootstrap.run(file, is_hello, args,flag_options)
+# You can use any name you prefer as long as it starts with an underscore
+def _main_run_clExplicit(file, is_hello, args=[], flag_options={}):
+    bootstrap.run(file, is_hello, args, flag_options)
 
 # ...if __name__ == "__main__":
-#...    main()
+# ...    main()
 ```
 
-## Now we need a hook to get streamlit metadata.
-## From the root of the project add a new folder and
-## create a file to be more organized because
-## in this folder will be created __pycache__
-## infos that we need to keep safe
-### .\hooks\hook-streamlit.py
-### the dash could indicate it will be read for pyinstaller as any other hook
-#### ( I actually don't know exacly why it is as it is)
+# Create a Hook to Get Streamlit Metadata
+
+- .\hooks\hook-streamlit.py
 ```python
 from PyInstaller.utils.hooks import copy_metadata
+
 datas = copy_metadata('streamlit')
 ```
 
-## OK now we have all we need to compile the app
-## just run this line to create our first run_app.spec file
-#### (if you are using the auto-py-to-exe we can't edit spec files from here we should edit from the interface in the advance options)
+# Compile the App
+Run the following command to create the first run_app.spec file. 
+Note that if you are using auto-py-to-exe, you can't edit spec files here; 
+you should edit them from the interface in the advanced options.
+
 ```bash
 pyinstaller --onefile --additional-hooks-dir=./hooks run_app.py --clean
-#the onfile indicate we are create a output file join
-# everthing in it's binary
-#Some use case you actually need --ondir instead
-#the --clean delete cache and remove temporary files before building.
-#--additional-hooks-dir An additional path to search for hooks. This option can be used multiple times.
+# --onefile: Create a single output file
+# --clean: Delete cache and remove temporary files before building
+# --additional-hooks-dir: An additional path to search for hooks. This option can be used multiple times.
 ```
 
-## Now we just have to create an folder and file with streamlit configs
-## It can be add in your root project and the output folder
-## or just the output folder.
-### .streamlit\config.toml
-```toml
+# Create Streamlit Configuration Files
+
+You can add these files to your project's root and the output folder, or just the output folder.
+
+- .streamlit\config.toml
+```bash
 [global]
 developmentMode = false
 
 [server]
 port = 8502
 ```
-## Assuming your have create this folder in the root project
-## as an expert streamlit you are
-## you can simply copy it to the output folder
+
+# Copy the Configuration Files to the Output Folder
 ```bash
 xcopy /s /e .streamlit output/.streamlit
-#select D = directory
+# Select D = directory
 ```
 
-## And perform the same for your app.py that contains streamlit logic
+# Copy app.py to the Output Folder
 ```bash
 copy app.py output/app.py
 ```
 
-## Everything in place you now have only one thing to add
-## the DATAS to the new hook we created
-### in the run_app.spec that was generated add the following...
-```spec
+# Add the Data to the New Hook in run_app.spec
+```python
 ...
 a = Analysis(
-    //...
+    ...
     datas=[
         (".env/Lib/site-packages/altair/vegalite/v5/schema/vega-lite-schema.json",
         "./altair/vegalite/v5/schema/"),
@@ -142,10 +147,14 @@ a = Analysis(
         "./streamlit/static"),
         (".env/Lib/site-packages/streamlit/runtime",
         "./streamlit/runtime"),
-    //...)
+    ]
+    ...
+)
 ...
+
 ```
-```bash
+# Notes
+```python
 # 
 # this path pair should be in that way
 # but I believe it is because we add the tuple as this templete
@@ -155,12 +164,12 @@ a = Analysis(
 # i.e: (".envir/Lib/site-packages/wmi.py",".")
 # for folders the behaviour is the same
 ```
-# All the modifications in the datas should be loaded using the command
+
+# Build the Executable
+
 ```bash
 pyinstaller run_app.spec --clean
 ```
-
-
 
 ## 🎈 It's done! run your run_app.exe file and see the magic 🪄
 
