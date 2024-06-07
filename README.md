@@ -3,8 +3,8 @@
 ## Create a virtual environment
 
 ```bash
-pyenv virtualenv <version> <env-name>
-#or
+pyenv virtualenv <version> .<env-name>
+#or THE DOT IS IMPORTANT!
 python -m venv .<env-name>
 ```
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 from streamlit.web import cli 
 #this uri depends based on version of your streamlit
 if __name__ == '__main__':
-    cli._main_run_clExplicit('app.py', 'streamlit run')
+    cli._main_run_clExplicit('app.py', args=['run'])
     #we will CREATE this function inside our streamlit framework
 ```
 ---
@@ -72,9 +72,8 @@ if __name__ == '__main__':
 # [...]
 # you can you the name you prefer ofcourse
 # as long as you use underscore at the beginning
-def _main_run_clExplicit(file, command_line, args=[],flag_options={}):
-    main._is_running_with_streamlit = True
-    bootstrap.run(file, command_line, args,flag_options)
+def _main_run_clExplicit(file, is_hello, args=[],flag_options={}):
+    bootstrap.run(file, is_hello, args,flag_options)
 
 # ...if __name__ == "__main__":
 #...    main()
@@ -137,8 +136,8 @@ copy app.py output/app.py
 a = Analysis(
     //...
     datas=[
-        (".env/Lib/site-packages/altair/vegalite/v4/schema/vega-lite-schema.json",
-        "./altair/vegalite/v4/schema/"),
+        (".env/Lib/site-packages/altair/vegalite/v5/schema/vega-lite-schema.json",
+        "./altair/vegalite/v5/schema/"),
         (".env/Lib/site-packages/streamlit/static",
         "./streamlit/static"),
         (".env/Lib/site-packages/streamlit/runtime",
